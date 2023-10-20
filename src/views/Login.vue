@@ -14,6 +14,7 @@
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
         <v-text-field
+          v-model="identifier"
           density="compact"
           placeholder="Email address or Phone Number"
           prepend-inner-icon="mdi-email-outline"
@@ -26,6 +27,7 @@
         </div>
 
         <v-text-field
+          v-model="password"
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
           density="compact"
@@ -42,6 +44,7 @@
           color="blue"
           size="large"
           variant="tonal"
+          type="submit"
         >
           Log In
         </v-btn>
@@ -63,7 +66,9 @@
   export default {
     data: () => ({
       visible: false,
-      valid: false
+      valid: false,
+      identifier: '',
+      password: ''
     }),
     methods: {
       getRules(field: string) {
@@ -73,6 +78,10 @@
       },
       login() {
         if (!this.valid) return;
+
+        const payload = { identifier: this.identifier, password: this.password, url: '/' };
+
+        this.$store.dispatch('login', payload)
       }
     }
   }

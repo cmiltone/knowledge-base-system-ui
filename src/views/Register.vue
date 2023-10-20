@@ -88,7 +88,6 @@ export default {
     email: '',
     phone: '',
     password: '',
-    passwordConfirmation: '',
   }),
   methods: {
     getRules(field: string) {
@@ -98,6 +97,10 @@ export default {
     },
     retister() {
       if (!this.valid) return;
+
+      const payload = { fullName: this.fullName, email: this.email, phoneNumber: this.phone, password: this.password, url: '/' };
+
+      this.$store.dispatch('register', payload)
     }
   }
 }
