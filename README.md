@@ -1,4 +1,4 @@
-# default
+# Knowledge Base System
 
 ## Project setup
 
