@@ -26,7 +26,7 @@ const article: Module<ArticleState, unknown> = {
   }),
   getters: {
     getArticle: (state) => (articleId: string) =>
-      state.articlePage.docs.find((c) => c._id === articleId),
+      state.articlePage.docs.find((a) => a._id === articleId),
     articlePage: (state) => state.articlePage,
   },
   mutations: {
@@ -50,11 +50,12 @@ const article: Module<ArticleState, unknown> = {
     },
   },
   actions: {
-    fetchArticle(context, params = "") {
-      api
+    async fetchArticle(context, params = "") {
+      return await api
         .get(`/v1/article${params}`)
         .then((response) => {
           context.commit("ADD_ARTICLE", response.data);
+          return response.data;
         })
         .catch((error) => {
           context.dispatch(
