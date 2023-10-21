@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    component: () => import('@/layouts/Full.vue'),
+    component: () => import('@/layouts/Auth.vue'),
     children: [
       {
         path: 'login',
@@ -12,17 +12,25 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Login.vue'),
+        component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue'),
       },
       {
         path: 'register',
         name: 'Register',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Register.vue'),
+        component: () => import(/* webpackChunkName: "register" */ '@/views/Register.vue'),
       },
     ],
+  },
+  {
+    path: '/article',
+    component: () => import('@/layouts/Full.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Article List',
+        component: () => import(/* webpackChunkName: "article-view" */ '@/views/Article.vue'),
+      }
+    ]
   },
 ]
 

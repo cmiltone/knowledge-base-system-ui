@@ -11,6 +11,7 @@
     "@kyvg/vue3-notification": "^3.0.2",
     "@mdi/font": "7.0.96",
     "axios": "^1.5.1",
+    "moment": "^2.29.4",
     "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vue-router": "^4.0.0",

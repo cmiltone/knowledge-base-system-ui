@@ -62,6 +62,10 @@ const auth: Module<AuthState, unknown> = {
     setRedirectUrl(context, url) {
       context.commit("SET_REDIRECT_URL", url);
     },
+    setUser(context) {
+      const user = JSON.parse(localStorage.getItem('user') as string);
+      context.commit('SET_USER', user);
+    }
   },
 };
 
