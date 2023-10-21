@@ -68,11 +68,12 @@ const article: Module<ArticleState, unknown> = {
           );
         });
     },
-    fetchArticleList(context, params = "") {
-      api
+    async fetchArticleList(context, params = "") {
+      return await api
         .get(`/v1/article${params}`)
         .then((response) => {
           context.commit("SET_ARTICLE_PAGE", response.data);
+          return response.data;
         })
         .catch((error) => {
           context.dispatch(

@@ -1,7 +1,7 @@
 <template>
   <v-app-bar :elevation="2" title="Knowledge Base System" rounded>
     <template v-slot:append>
-      <v-btn icon="mdi-dots-vertical"></v-btn>
+      <v-btn icon="mdi-logout" @click="logout" title="Logout"></v-btn>
     </template>
   </v-app-bar>
   <v-navigation-drawer>
@@ -25,8 +25,12 @@
       }
     },
     created() {
-      console.log('dispatched')
       this.$store.dispatch('setUser')
     },
+    methods: {
+      logout() {
+        this.$store.dispatch('logout')
+      }
+    }
   }
 </script>
