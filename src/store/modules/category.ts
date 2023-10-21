@@ -1,16 +1,16 @@
 import { Module } from "vuex";
 
 import { api } from "@/util/axios";
-import { Article } from "@/types/article";
+import { Category } from "@/types/article";
 
-type ArticleState = {
-  articlePage: PaginateResult<Article>;
+type CategoryState = {
+  categoryPage: PaginateResult<Category>;
 };
 
-const article: Module<ArticleState, unknown> = {
+const category: Module<CategoryState, unknown> = {
   namespaced: true,
   state: () => ({
-    articlePage: {
+    categoryPage: {
       docs: [],
       totalDocs: 0,
       limit: 10,
@@ -25,36 +25,36 @@ const article: Module<ArticleState, unknown> = {
     },
   }),
   getters: {
-    getArticle: (state) => (articleId: string) =>
-      state.articlePage.docs.find((c) => c._id === articleId),
-    articlePage: (state) => state.articlePage,
+    getCategory: (state) => (categoryId: string) =>
+      state.categoryPage.docs.find((c) => c._id === categoryId),
+    categoryPage: (state) => state.categoryPage,
   },
   mutations: {
-    ADD_ARTICLE: (state, _article) => {
+    ADD_CATEGORY: (state, _category) => {
       let idx = -1;
-      state.articlePage.docs.map((r, i) => {
-        if (r._id === _article._id) idx = i;
+      state.categoryPage.docs.map((r, i) => {
+        if (r._id === _category._id) idx = i;
       });
-      if (idx === -1) state.articlePage.docs.push(_article);
-      else state.articlePage.docs[idx] = _article;
+      if (idx === -1) state.categoryPage.docs.push(_category);
+      else state.categoryPage.docs[idx] = _category;
     },
-    SET_ARTICLE_PAGE: (state, list) => {
-      state.articlePage = list;
+    SET_CATEGORY_PAGE: (state, list) => {
+      state.categoryPage = list;
     },
-    REMOVE_ARTICLE(state, article) {
+    REMOVE_CATEGORY(state, category) {
       let idx = -1;
-      state.articlePage.docs.map((r, i) => {
-        if (r._id === article._id) idx = i;
+      state.categoryPage.docs.map((r, i) => {
+        if (r._id === category._id) idx = i;
       });
-      if (idx > -1) state.articlePage.docs.splice(idx, 1);
+      if (idx > -1) state.categoryPage.docs.splice(idx, 1);
     },
   },
   actions: {
-    fetchArticle(context, params = "") {
+    fetchCategory(context, params = "") {
       api
-        .get(`/v1/article${params}`)
+        .get(`/v1/category${params}`)
         .then((response) => {
-          context.commit("ADD_ARTICLE", response.data);
+          context.commit("ADD_CATEGORY", response.data);
         })
         .catch((error) => {
           context.dispatch(
@@ -68,11 +68,11 @@ const article: Module<ArticleState, unknown> = {
           );
         });
     },
-    async fetchArticleList(context, params = "") {
+    async fetchCategoryList(context, params = "") {
       return await api
-        .get(`/v1/article${params}`)
+        .get(`/v1/category${params}`)
         .then((response) => {
-          context.commit("SET_ARTICLE_PAGE", response.data);
+          context.commit("SET_CATEGORY_PAGE", response.data);
           return response.data;
         })
         .catch((error) => {
@@ -87,21 +87,21 @@ const article: Module<ArticleState, unknown> = {
           );
         });
     },
-    async createArticle(context, payload) {
+    async createCategory(context, payload) {
       return await api
-        .post(`/v1/article`, payload)
+        .post(`/v1/category`, payload)
         .then((response) => {
-          context.commit("ADD_ARTICLE", response.data);
+          context.commit("ADD_CATEGORY", response.data);
           context.dispatch(
             "setToast",
             {
               title: "Success",
               type: "success",
-              text: "Article created",
+              text: "Category created",
             },
             { root: true }
           );
-          return response.data;
+          return response.data.category;
         })
         .catch((error) => {
           context.dispatch(
@@ -115,17 +115,17 @@ const article: Module<ArticleState, unknown> = {
           );
         });
     },
-    updateArticle(context, data: { id: string; article: Article }) {
+    updateCategory(context, data: { id: string; category: Category }) {
       api
-        .put(`/v1/article/${data.id}`, data.article)
+        .put(`/v1/category/${data.id}`, data.category)
         .then((response) => {
-          context.commit("ADD_ARTICLE", response.data);
+          context.commit("ADD_CATEGORY", response.data);
           context.dispatch(
             "setToast",
             {
               title: "Success",
               type: "success",
-              text: "Article updated",
+              text: "Category updated",
             },
             { root: true }
           );
@@ -142,17 +142,17 @@ const article: Module<ArticleState, unknown> = {
           );
         });
     },
-    deleteArticle(context, id) {
+    deleteCategory(context, id) {
       api
-        .delete(`/v1/article${id}`)
+        .delete(`/v1/category${id}`)
         .then((response) => {
-          context.commit("REMOVE_ARTICLE", response.data);
+          context.commit("REMOVE_CATEGORY", response.data);
           context.dispatch(
             "setToast",
             {
               title: "Success",
               type: "success",
-              text: "Article deleted",
+              text: "Category deleted",
             },
             { root: true }
           );
@@ -172,4 +172,4 @@ const article: Module<ArticleState, unknown> = {
   },
 };
 
-export default article;
+export default category;

@@ -28,8 +28,13 @@ const routes = [
       {
         path: '',
         name: 'Article List',
-        component: () => import(/* webpackChunkName: "article-view" */ '@/views/Article.vue'),
-      }
+        component: () => import(/* webpackChunkName: "article-list" */ '@/views/Article.vue'),
+      },
+      {
+        path: 'new',
+        name: 'Create Article',
+        component: () => import(/* webpackChunkName: "create-article" */ '@/views/CreateArticle.vue'),
+      },
     ]
   },
 ]
