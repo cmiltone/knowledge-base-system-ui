@@ -115,9 +115,9 @@ const category: Module<CategoryState, unknown> = {
           );
         });
     },
-    updateCategory(context, data: { id: string; category: Category }) {
+    updateCategory(context, data) {
       api
-        .put(`/v1/category/${data.id}`, data.category)
+        .put(`/v1/category`, data)
         .then((response) => {
           context.commit("ADD_CATEGORY", response.data);
           context.dispatch(

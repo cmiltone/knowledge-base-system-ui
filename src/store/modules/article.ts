@@ -116,9 +116,9 @@ const article: Module<ArticleState, unknown> = {
           );
         });
     },
-    updateArticle(context, data: { id: string; article: Article }) {
+    updateArticle(context, data) {
       api
-        .put(`/v1/article/${data.id}`, data.article)
+        .put(`/v1/article`, data)
         .then((response) => {
           context.commit("ADD_ARTICLE", response.data);
           context.dispatch(

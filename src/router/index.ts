@@ -41,6 +41,12 @@ const routes = [
         props: true,
         component: () => import(/* webpackChunkName: "view-article" */ '@/views/ViewArticle.vue'),
       },
+      {
+        path: 'edit/:articleId',
+        name: 'Edit Article',
+        props: true,
+        component: () => import(/* webpackChunkName: "edit-article" */ '@/views/EditArticle.vue'),
+      },
     ]
   },
 ]

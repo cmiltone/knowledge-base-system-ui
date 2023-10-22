@@ -44,14 +44,15 @@
 
       <v-card-actions class="text-right">
         <p>Posted by: {{ article.creator?.fullName }}, {{ readableDate(article.createdAt, 'MMM Do, YYYY h:mmA') }}</p>
-        <!-- <v-btn
+        <v-btn
+          v-if="article.creator?._id === user._id || user.role === 'admin'"
           class="mx-4"
           variant="tonal"
-          to="/article"
+          :to="`/article/edit/${article._id}`"
           color="blue"
         >
-          <v-icon icon="mdi-chevron-left"></v-icon> Back
-        </v-btn> -->
+          <v-icon icon="mdi-pencil"></v-icon> Edit
+        </v-btn>
       </v-card-actions>
       
     </v-card>
