@@ -1,5 +1,25 @@
 <template>
   <div v-if="article">
+    <v-dialog
+      v-model="mediaDialog"
+      max-width="80%"
+      max-height="80%"
+    >
+      <v-card v-if="media">
+        <v-card-title>{{ media.title }}</v-card-title>
+        <v-img
+          v-if="media.type === 'image'"
+          :src="`${fileBaseUrl}/${media.filename}`"
+          height="600"
+        />
+        <video v-else height="600" controls :src="`${fileBaseUrl}/${media.filename}`"></video>
+
+        
+        <div class="text-right">
+          <v-btn color="blue" @click="mediaDialog = false">Close</v-btn>
+        </div>
+      </v-card>
+    </v-dialog>
     <h1 class="ma-6">
       <router-link to="/article">Articles</router-link> <v-icon icon="mdi-chevron-right" /> {{ article.title }}
     </h1>
@@ -24,34 +44,31 @@
         <p class="mt-4">{{ article.content }}</p>
       </v-card-text>
 
-      <div style="
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        align-content: center;"
-      >
-        <div
-          v-for="media in article.media"
-          :key="media.filename"
-          class="text-center"
-          style="max-width: 280px;"
+      <v-row class="my-4">
+        <v-col
+          v-for="(media, i) in article.media"
+          :key="media._id"
+          cols="12"
+          sm="4"
         >
-          <v-img
-            v-if="media.type === 'image'"
-            :src="`${fileBaseUrl}/${media.filename}`"
-            height="250px"
-          />
-          <video
-            v-else
-            :src="`${fileBaseUrl}/${media.filename}`"
-            style="max-height: 400px;"
-            controls
-          ></video>
-        </div>
-      </div>
+          <v-card max-width="210">
+          <v-card-title>Media #{{ i + 1 }}</v-card-title>
+          <v-card-subtitle>Type: {{ media.type }}</v-card-subtitle>
+          <v-card-text>
+            <v-img v-if="media.type === 'image'" height="200" :src="`${fileBaseUrl}/${media.thumbnail}`" />
+            <video v-else height="200" :src="`${fileBaseUrl}/${media.filename}`" controls></video>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn title="View Media" color="blue" @click="viewMedia(media)">
+              <v-icon icon="mdi-arrow-expand-all"></v-icon>
+            </v-btn>
+          </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
 
-      <v-card-actions class="text-right">
-        <p>Posted by: {{ article.creator?.fullName }}, {{ readableDate(article.createdAt, 'MMM Do, YYYY h:mmA') }}</p>
+      <div class="text-right">
+        <p>Posted by: <b>{{ article.creator?.fullName }}</b>, {{ readableDate(article.createdAt, 'MMM Do, YYYY h:mmA') }}</p>
         <v-btn
           v-if="article.creator?._id === user._id || user.role === 'admin'"
           class="mx-4"
@@ -61,7 +78,7 @@
         >
           <v-icon icon="mdi-pencil"></v-icon> Edit
         </v-btn>
-      </v-card-actions>
+      </div>
       
     </v-card>
   </div>
@@ -72,6 +89,7 @@ import { createNamespacedHelpers } from 'vuex';
 
 import articleStoreModule from '@/store/modules/article';
 import { readableDate } from '@/util/filters';
+import { Media } from "@/types/media";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -83,7 +101,9 @@ export default {
   name: 'ArticleView',
   data: () => ({
     loading: false,
-    fileBaseUrl: `${BASE_URL}/v1/file`
+    fileBaseUrl: `${BASE_URL}/v1/file`,
+    media: undefined as undefined | Media,
+    mediaDialog: false,
   }),
   props: {
     articleId: {
@@ -113,6 +133,10 @@ export default {
       ]
     },
     readableDate,
+    viewMedia(media: Media) {
+      this.media = media;
+      this.mediaDialog = true;
+    }
   },
   beforeCreate() {
       if (!this.$store.hasModule('ARTICLE')) {

@@ -67,7 +67,7 @@ const auth: Module<AuthState, unknown> = {
       context.commit('SET_USER', user);
     },
     logout() {
-      clearAuth('/login')
+      clearAuth('/')
     }
   },
 };
