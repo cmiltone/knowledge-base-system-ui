@@ -20,7 +20,7 @@
         />
       </v-col>
       <v-col cols="2">
-        <v-btn v-if="user.role === 'expert'" to="/article/new">
+        <v-btn v-if="user.role === 'creator'" to="/article/new">
           Create
         </v-btn>
       </v-col>
@@ -151,9 +151,11 @@ export default {
       this.loading = true;
       let params = `?limit=${this.limit}&page=${this.page}`;
       const status = this.user.role === 'user' ? '&status=published' : '';
+      const userId = this.user.role === 'creator' ? `&userId=${this.user._id}` : '';
 
       params += status;
       params += p;
+      params += userId;
 
       this.fetchArticleList(params).then((data) => {
         if (data) {

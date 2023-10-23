@@ -18,7 +18,7 @@
 
         <v-select
           v-model="role"
-          :items="['admin', 'user', 'expert']"
+          :items="['admin', 'user', 'creator']"
           variant="outlined"
           placeholder="Role"
           label="Select role"
