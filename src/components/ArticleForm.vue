@@ -1,4 +1,14 @@
 <template>
+  <v-dialog
+    v-model="categoryDialog"
+    persistent
+    max-width="300"
+  >
+    <category-form
+      v-if="categoryDialog"
+      @category-saved="categoryDialog = false"
+    />
+  </v-dialog>
   <div>
     <h1 class="mx-auto my-6 text-center" style="max-width: 500px;">
       Create Article
@@ -42,7 +52,7 @@
           @update:search="searchCategories"
         >
           <template v-slot:no-data>
-            <i style="margin: 0 5px" @click="addCategory">Add Category</i>
+            <v-btn color="blue" variant="text" class="ma-2" @click="addCategory">Add Category</v-btn>
           </template>
         </v-autocomplete>
 
@@ -99,6 +109,7 @@ import { createNamespacedHelpers } from 'vuex';
 
 import articleStoreModule from '@/store/modules/article';
 import categoryStoreModule from '@/store/modules/category';
+import CategoryForm from './CategoryForm.vue';
 
 const {
   mapActions: articleActions,
@@ -110,6 +121,7 @@ const {
 } = createNamespacedHelpers('CATEGORY');
 
 export default {
+  components: { CategoryForm },
   name: 'ArticleForm',
   data: () => ({
     valid: false,
@@ -120,6 +132,7 @@ export default {
     loadingCategories: false,
     images: [] as File[],
     //videos: [] as File[],
+    categoryDialog: false
   }),
   computed: {
     ...categoryGetters(['categoryPage']),
@@ -169,8 +182,11 @@ export default {
     },
     searchCategories(q: string) {
       if (q) this.fetchCategories(`&q=${q}`)
+      else this.fetchCategories()
     },
-    addCategory() {}
+    addCategory() {
+      this.categoryDialog = true;
+    }
   },
   beforeCreate() {
       if (!this.$store.hasModule('CREATE_ARTICLE')) {

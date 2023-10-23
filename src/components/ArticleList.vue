@@ -116,7 +116,8 @@ export default {
     searchArticle(ev: InputEvent) {
       const q = (ev.target as HTMLInputElement).value;
 
-      if (q) this.fetchArticles(`&q=${q}`)
+      if (q) this.fetchArticles(`&q=${q}`);
+      else this.fetchArticles();
     },
     fetchArticles(p = '') {
       this.loading = true;

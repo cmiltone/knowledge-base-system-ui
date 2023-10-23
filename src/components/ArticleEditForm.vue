@@ -1,5 +1,15 @@
 <template>
   <div v-if="article">
+    <v-dialog
+      v-model="categoryDialog"
+      persistent
+      max-width="300"
+    >
+      <category-form
+        v-if="categoryDialog"
+        @category-saved="categoryDialog = false"
+      />
+    </v-dialog>
     <h1 class="ma-6">
       <router-link to="/article">Articles</router-link> <v-icon icon="mdi-chevron-right" /> Edit <v-icon icon="mdi-chevron-right" /> {{ article.title }}
     </h1>
@@ -42,7 +52,7 @@
           @update:search="searchCategories"
         >
           <template v-slot:no-data>
-            <i style="margin: 0 5px" @click="addCategory">Add Category</i>
+            <v-btn color="blue" variant="text" class="ma-2" @click="addCategory">Add Category</v-btn>
           </template>
         </v-autocomplete>
 
@@ -62,7 +72,8 @@
             <v-card-title>Media #{{ i + 1 }}</v-card-title>
             <v-card-subtitle>Type: {{ media.type }}</v-card-subtitle>
             <v-card-text>
-              <v-img height="200" :src="`${fileBaseUrl}/${media.thumbnail}`" />
+              <v-img v-if="media.type === 'image'" height="200" :src="`${fileBaseUrl}/${media.thumbnail}`" />
+              <video v-else height="200" :src="`${fileBaseUrl}/${media.filename}`" controls></video>
             </v-card-text>
             <v-card-actions>
               <v-btn title="Delete Media" color="red" @click="removeMedia(media._id)">
@@ -122,6 +133,7 @@ import { createNamespacedHelpers } from 'vuex';
 
 import articleStoreModule from '@/store/modules/article';
 import categoryStoreModule from '@/store/modules/category';
+import CategoryForm from './CategoryForm.vue';
 
 const {
   mapActions: articleActions,
@@ -130,12 +142,13 @@ const {
 const {
   mapGetters: categoryGetters,
   mapActions: categoryActions,
-} = createNamespacedHelpers('CATEGORY');
+} = createNamespacedHelpers('EDIT_ARTICLE_CATEGORY');
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export default {
   name: 'ArticleEditForm',
+  components: { CategoryForm },
   data: () => ({
     valid: false,
     fileBaseUrl: `${BASE_URL}/v1/file`,
@@ -147,7 +160,8 @@ export default {
     loadingCategories: false,
     images: [] as File[],
     //videos: [] as File[],
-    deletedMedia: [] as string[]
+    deletedMedia: [] as string[],
+    categoryDialog: false,
   }),
   props: {
     articleId: {
@@ -217,9 +231,12 @@ export default {
       })
     },
     searchCategories(q: string) {
-      if (q) this.fetchCategories(`&q=${q}`)
+      if (q) this.fetchCategories(`&q=${q}`);
+      else this.fetchCategories()
     },
-    addCategory() {},
+    addCategory() {
+      this.categoryDialog = true;
+    },
     removeMedia(id: string) {
       this.deletedMedia.push(id);
     }
@@ -228,13 +245,13 @@ export default {
       if (!this.$store.hasModule('EDIT_ARTICLE')) {
         this.$store.registerModule('EDIT_ARTICLE', articleStoreModule)
       }
-      if (!this.$store.hasModule('CATEGORY')) {
-        this.$store.registerModule('CATEGORY', categoryStoreModule);
+      if (!this.$store.hasModule('EDIT_ARTICLE_CATEGORY')) {
+        this.$store.registerModule('EDIT_ARTICLE_CATEGORY', categoryStoreModule);
       }
   },
   beforeUnmount() {
     this.$store.unregisterModule('EDIT_ARTICLE');
-    this.$store.unregisterModule('CATEGORY');
+    this.$store.unregisterModule('EDIT_ARTICLE_CATEGORY');
   }
 }
 </script>
