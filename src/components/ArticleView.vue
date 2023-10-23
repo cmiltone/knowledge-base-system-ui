@@ -24,22 +24,30 @@
         <p class="mt-4">{{ article.content }}</p>
       </v-card-text>
 
-      <div
-        v-for="media in article.media"
-        :key="media.filename"
-        class="text-center"
+      <div style="
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: center;"
       >
-        <v-img
-          v-if="media.type === 'image'"
-          :src="`${fileBaseUrl}/${media.filename}`"
-          height="250px"
-        />
-        <video
-          v-else
-          :src="`${fileBaseUrl}/${media.filename}`"
-          style="max-height: 400px;"
-          controls
-        ></video>
+        <div
+          v-for="media in article.media"
+          :key="media.filename"
+          class="text-center"
+          style="max-width: 280px;"
+        >
+          <v-img
+            v-if="media.type === 'image'"
+            :src="`${fileBaseUrl}/${media.filename}`"
+            height="250px"
+          />
+          <video
+            v-else
+            :src="`${fileBaseUrl}/${media.filename}`"
+            style="max-height: 400px;"
+            controls
+          ></video>
+        </div>
       </div>
 
       <v-card-actions class="text-right">
