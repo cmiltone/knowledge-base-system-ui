@@ -39,7 +39,7 @@ const routes = [
       {
         path: '',
         name: 'Article List',
-        component: () => import(/* webpackChunkName: "article-list" */ '@/views/Article.vue'),
+        component: () => import(/* webpackChunkName: "article-list" */ '@/views/Articles.vue'),
       },
       {
         path: 'new',
@@ -57,6 +57,17 @@ const routes = [
         name: 'Edit Article',
         props: true,
         component: () => import(/* webpackChunkName: "edit-article" */ '@/views/EditArticle.vue'),
+      },
+    ]
+  },
+  {
+    path: '/user',
+    component: () => import('@/layouts/Full.vue'),
+    children: [
+      {
+        path: '',
+        name: 'User List',
+        component: () => import(/* webpackChunkName: "user-list" */ '@/views/Users.vue'),
       },
     ]
   },

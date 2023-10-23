@@ -8,7 +8,7 @@
         <v-text-field placeholder="Search articles" prepend-icon="mdi-magnify" @keyup="searchArticle"/>
       </v-col>
       <v-col cols="2">
-        <v-btn to="/article/new">
+        <v-btn v-if="user.role === 'expert'" to="/article/new">
           Create
         </v-btn>
       </v-col>

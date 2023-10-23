@@ -9,7 +9,8 @@
     <v-divider></v-divider>
     <v-list-item link title="Dashboard" to="/" />
     <v-list-item link title="Articles" to="/article" />
-    <v-list-item link title="Setting" />
+    <v-list-item v-if="user.role === 'admin'" link title="User" to="/user" />
+    <v-list-item link title="Settings" />
   </v-navigation-drawer>
   <v-main>
     <router-view />
