@@ -82,6 +82,20 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/:pathMatch(.*)*',
+    meta: {
+      noAuth: true
+    },
+    component: () => import('@/layouts/Auth.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Not Found',
+        component: () => import(/* webpackChunkName: "not-found" */ '@/views/404Page.vue'),
+      }
+    ],
+  },
 ]
 
 const router = createRouter({
