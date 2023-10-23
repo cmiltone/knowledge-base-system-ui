@@ -4,8 +4,20 @@
       <v-col cols="2">
         Articles
       </v-col>
-      <v-col cols="8">
-        <v-text-field placeholder="Search articles" prepend-icon="mdi-magnify" @keyup="searchArticle"/>
+      <v-col cols="8" style="display: flex;">
+        <v-text-field class="mx-2" placeholder="Search articles" prepend-icon="mdi-magnify" @keyup="searchArticle"/>
+        <v-autocomplete
+          v-model="categoryId"
+          :items="categoryPage.docs"
+          item-title="name"
+          item-value="_id"
+          placeholder="Filter by Category"
+          no-data-text="No categories to display"
+          class="mx-2"
+          :no-filter="true"
+          :loading="loadingCategories"
+          @update:search="searchCategories"
+        />
       </v-col>
       <v-col cols="2">
         <v-btn v-if="user.role === 'expert'" to="/article/new">
@@ -58,15 +70,22 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 
 import { readableDate } from '@/util/filters';
 import articleStoreModule from '@/store/modules/article';
+import categoryStoreModule from '@/store/modules/category';
 
 const {
   mapGetters: articleGetters,
   mapActions: articleActions,
 } = createNamespacedHelpers('ARTICLE_LIST');
+
+const {
+  mapGetters: categoryGetters,
+  mapActions: categoryActions,
+} = createNamespacedHelpers('LIST_ARTICLE_CATEGORY');
 export default {
   name: 'ArticleList',
   components: { VDataTableServer },
   data: () => ({
+    loadingCategories: false,
     headers: [
       {
         key: 'title',
@@ -99,19 +118,26 @@ export default {
     hasNextPage: false,
     page: 1,
     totalPages: 0,
-    loading: false
+    loading: false,
+    categoryId: ''
   }),
   created() {
-    this.fetchArticles()
+    this.fetchArticles();
+    this.fetchCategories()
   },
   computed: {
     ...articleGetters(["articlePage"]),
+    ...categoryGetters(['categoryPage']),
     user() {
       return this.$store.getters.user;
     },
   },
+  watch: {
+    categoryId: 'searchByCategory'
+  },
   methods: {
     ...articleActions(["fetchArticleList"]),
+    ...categoryActions(['fetchCategoryList']),
     readableDate,
     searchArticle(ev: InputEvent) {
       const q = (ev.target as HTMLInputElement).value;
@@ -139,15 +165,37 @@ export default {
       this.page = opts.page;
       this.limit = opts.itemsPerPage;
       this.fetchArticles();
+    },
+    fetchCategories(p = '') {
+      this.loadingCategories = true;
+      let params = `?status=active&limit=1000`;
+
+      if (p) {
+        params += p;
+      }
+      this.fetchCategoryList(params).then((data) => {
+        if (data) this.loadingCategories = false;
+      })
+    },
+    searchCategories(q: string) {
+      if (q) this.fetchCategories(`&q=${q}`);
+      else this.fetchCategories()
+    },
+    searchByCategory() {
+      if (this.categoryId) this.fetchArticles(`&categoryId=${this.categoryId}`);
     }
   },
   beforeCreate() {
       if (!this.$store.hasModule('ARTICLE_LIST')) {
         this.$store.registerModule('ARTICLE_LIST', articleStoreModule)
       }
+      if (!this.$store.hasModule('LIST_ARTICLE_CATEGORY')) {
+        this.$store.registerModule('LIST_ARTICLE_CATEGORY', categoryStoreModule);
+      }
   },
   beforeUnmount() {
     this.$store.unregisterModule('ARTICLE_LIST')
+    this.$store.unregisterModule('LIST_ARTICLE_CATEGORY');
   }
 }
 </script>
