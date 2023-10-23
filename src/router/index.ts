@@ -1,4 +1,5 @@
 // Composables
+import { isAuthenticated } from '@/util/auth';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -14,21 +15,31 @@ const routes = [
     ],
   },
   {
-    path: '/auth',
+    path: '/login',
+    name: 'Auth Login',
     component: () => import('@/layouts/Auth.vue'),
     children: [
       {
-        path: 'login',
+        path: '',
         name: 'Login',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue'),
+        meta: { noAuth: true },
       },
+    ],
+  },
+  {
+    path: '/register',
+    name: 'Auth Register',
+    component: () => import('@/layouts/Auth.vue'),
+    children: [
       {
-        path: 'register',
+        path: '',
         name: 'Register',
         component: () => import(/* webpackChunkName: "register" */ '@/views/Register.vue'),
+        meta: { noAuth: true },
       },
     ],
   },
@@ -77,5 +88,17 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.meta?.noAuth) {
+    next();
+  } else {
+    if (isAuthenticated()) {
+      next();
+      return;
+    }
+    next({ path: "/login", query: { redirectUrl: to.fullPath } });
+  }
+});
 
 export default router

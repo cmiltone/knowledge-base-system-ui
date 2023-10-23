@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :elevation="2" title="Knowledge Base System" rounded>
+  <v-app-bar :elevation="2" title="Agriculture Knowledge Base System" rounded>
     <template v-slot:append>
       <v-btn icon="mdi-logout" @click="logout" title="Logout"></v-btn>
     </template>

@@ -1,8 +1,9 @@
 <template>
   <v-container>
-    <h1 class="mx-auto my-6 text-center" style="max-width: 356px;">
-      Knowledge Base System
-    </h1>
+    <v-img src="../assets/logo.png" height="100"/>
+    <!-- <h1 class="mx-auto my-6 text-center" style="max-width: 356px;">
+      Agriculture Knowledge Base System
+    </h1> -->
     <h3 class="mx-auto my-6 text-center" style="max-width: 300px;">Sign In</h3>
     <v-card
       class="mx-auto pa-12 pb-8"
@@ -79,7 +80,9 @@
       login() {
         if (!this.valid) return;
 
-        const payload = { identifier: this.identifier, password: this.password, url: '/' };
+        const url = this.$route.query.redirectUrl;
+
+        const payload = { identifier: this.identifier, password: this.password, url: url ?? '/' };
 
         this.$store.dispatch('login', payload)
       }

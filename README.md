@@ -1,4 +1,4 @@
-# Knowledge Base System
+# Agriculture Knowledge Base System
 
 ## Project setup
 
