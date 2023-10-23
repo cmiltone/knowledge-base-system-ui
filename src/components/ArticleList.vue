@@ -122,8 +122,10 @@ export default {
     categoryId: ''
   }),
   created() {
-    this.fetchArticles();
-    this.fetchCategories()
+    if (this.$route.query.categoryId) {
+      this.categoryId = this.$route.query.categoryId as string;
+    } else this.fetchArticles();
+    this.fetchCategories();
   },
   computed: {
     ...articleGetters(["articlePage"]),

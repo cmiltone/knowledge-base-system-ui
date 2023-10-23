@@ -18,7 +18,7 @@
           indeterminate
         />
       </template>
-      <v-card-title>Category: <router-link to="/article">{{ article.category?.name }}</router-link></v-card-title>
+      <v-card-title>Category: <router-link :to="`/article?categoryId=${article.category?._id}`">{{ article.category?.name }}</router-link></v-card-title>
 
       <v-card-text>
         <p class="mt-4">{{ article.content }}</p>
