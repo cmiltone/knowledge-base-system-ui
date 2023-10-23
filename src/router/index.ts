@@ -4,6 +4,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
+    component: () => import('@/layouts/Full.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+      },
+    ],
+  },
+  {
+    path: '/auth',
     component: () => import('@/layouts/Auth.vue'),
     children: [
       {
