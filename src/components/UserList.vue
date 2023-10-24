@@ -33,7 +33,7 @@
   <v-container>
     <v-row>
       <v-col cols="4">
-        <h3>Users</h3>
+        <h1>Users</h1>
       </v-col>
       <v-col cols="8">
         <v-text-field placeholder="Search users" prepend-icon="mdi-magnify" @keyup="searchUser"/>

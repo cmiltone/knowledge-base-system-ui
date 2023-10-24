@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="2">
-        Articles
+        <h1>Articles</h1>
       </v-col>
       <v-col cols="8" style="display: flex;">
         <v-text-field class="mx-2" placeholder="Search articles" prepend-icon="mdi-magnify" @keyup="searchArticle"/>
