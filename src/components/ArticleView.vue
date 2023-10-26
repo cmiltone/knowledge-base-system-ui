@@ -46,14 +46,12 @@
 
       <v-row class="my-4">
         <v-col
-          v-for="(media, i) in article.media"
+          v-for="(media) in article.media"
           :key="media._id"
           cols="12"
           sm="4"
         >
           <v-card max-width="210">
-          <v-card-title>Media #{{ i + 1 }}</v-card-title>
-          <v-card-subtitle>Type: {{ media.type }}</v-card-subtitle>
           <v-card-text>
             <v-img v-if="media.type === 'image'" height="200" :src="`${fileBaseUrl}/${media.thumbnail}`" />
             <video v-else height="200" :src="`${fileBaseUrl}/${media.filename}`" controls></video>
@@ -69,6 +67,7 @@
 
       <div class="text-right">
         <p>Posted by: <b>{{ article.creator?.fullName }}</b>, {{ readableDate(article.createdAt, 'MMM Do, YYYY h:mmA') }}</p>
+        <br>
         <v-btn
           v-if="article.creator?._id === user._id || user.role === 'admin'"
           class="mx-4"
