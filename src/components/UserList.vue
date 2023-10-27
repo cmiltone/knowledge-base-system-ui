@@ -111,6 +111,10 @@ export default {
         title: 'Email',
       },
       {
+        key: 'phoneNumber',
+        title: 'Phone',
+      },
+      {
         key: 'role',
         title: 'Role',
       },
