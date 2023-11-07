@@ -20,3 +20,30 @@ type Article = {
     createdAt?: Date;
     updatedAt?: Date;
 };
+
+
+
+type Comment = {
+    _id?: string;
+    message: string;
+    user: User;
+    reply?: Comment;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+type Like = {
+    _id?: string;
+    user: User;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+type Engagement = {
+    _id?: string;
+    article: Article;
+    comments: Comment[];
+    likes: Like[];
+    createdAt?: Date;
+    updatedAt?: Date;
+}

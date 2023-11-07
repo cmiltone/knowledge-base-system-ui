@@ -79,6 +79,11 @@
             </v-card>
           </v-col>
         </v-row>
+
+        <br><br>
+
+        <engagement v-if="article.engagement" :engagement="article.engagement" @saved="getArticle" />
+
       </v-card-text>
       
     </v-card>
@@ -91,6 +96,7 @@ import { createNamespacedHelpers } from 'vuex';
 import articleStoreModule from '@/store/modules/article';
 import { readableDate } from '@/util/filters';
 import { Media } from "@/types/media";
+import Engagement from './Engaement.vue';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -99,6 +105,7 @@ const {
 } = createNamespacedHelpers('ARTICLE');
 
 export default {
+  components: { Engagement },
   name: 'ArticleView',
   data: () => ({
     loading: false,
@@ -122,9 +129,7 @@ export default {
   },
   created() {
     this.loading = true;
-    this.fetchArticle(`?articleId=${this.articleId}`).then((data) => {
-      if (data) this.loading = false;
-    })
+    this.getArticle();
   },
   methods: {
     ...articleActions(['createArticle', 'fetchArticle']),
@@ -137,6 +142,11 @@ export default {
     viewMedia(media: Media) {
       this.media = media;
       this.mediaDialog = true;
+    },
+    getArticle() {
+      this.fetchArticle(`?articleId=${this.articleId}`).then((data) => {
+        if (data) this.loading = false;
+      })
     }
   },
   beforeCreate() {
