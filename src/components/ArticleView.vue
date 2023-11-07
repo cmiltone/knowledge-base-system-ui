@@ -40,44 +40,46 @@
       </template>
       <v-card-title>Category: <router-link :to="`/article?categoryId=${article.category?._id}`">{{ article.category?.name }}</router-link></v-card-title>
 
+      <v-card-subtitle class="">
+        <div>
+          Posted by: <b>{{ article.creator?.fullName }}</b>, {{ readableDate(article.createdAt, 'MMM Do, YYYY h:mmA') }} &nbsp;
+          <v-btn
+            v-if="article.creator?._id === user._id || user.role === 'admin'"
+            class="mx-4"
+            variant="tonal"
+            :to="`/article/edit/${article._id}`"
+            color="blue"
+            rounded
+            size="sm"
+          >
+            <v-icon icon="mdi-pencil"></v-icon> Edit
+          </v-btn>
+        </div>
+      </v-card-subtitle>
       <v-card-text>
         <p class="mt-4">{{ article.content }}</p>
+
+        <v-row class="my-4">
+          <v-col
+            v-for="(media) in article.media"
+            :key="media._id"
+            cols="12"
+            sm="4"
+          >
+            <v-card max-width="210">
+            <v-card-text>
+              <v-img v-if="media.type === 'image'" height="200" :src="`${fileBaseUrl}/${media.thumbnail}`" />
+              <video v-else height="200" :src="`${fileBaseUrl}/${media.filename}`" controls></video>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn title="View Media" color="blue" @click="viewMedia(media)">
+                <v-icon icon="mdi-arrow-expand-all"></v-icon>
+              </v-btn>
+            </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-card-text>
-
-      <v-row class="my-4">
-        <v-col
-          v-for="(media) in article.media"
-          :key="media._id"
-          cols="12"
-          sm="4"
-        >
-          <v-card max-width="210">
-          <v-card-text>
-            <v-img v-if="media.type === 'image'" height="200" :src="`${fileBaseUrl}/${media.thumbnail}`" />
-            <video v-else height="200" :src="`${fileBaseUrl}/${media.filename}`" controls></video>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn title="View Media" color="blue" @click="viewMedia(media)">
-              <v-icon icon="mdi-arrow-expand-all"></v-icon>
-            </v-btn>
-          </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <div class="text-right">
-        <p>Posted by: <b>{{ article.creator?.fullName }}</b>, {{ readableDate(article.createdAt, 'MMM Do, YYYY h:mmA') }}</p>
-        <br>
-        <v-btn
-          v-if="article.creator?._id === user._id || user.role === 'admin'"
-          class="mx-4"
-          variant="tonal"
-          :to="`/article/edit/${article._id}`"
-          color="blue"
-        >
-          <v-icon icon="mdi-pencil"></v-icon> Edit
-        </v-btn>
-      </div>
       
     </v-card>
   </div>
