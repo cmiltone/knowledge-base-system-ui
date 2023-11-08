@@ -50,17 +50,6 @@
         <!-- <v-btn size="x-small" color="red" icon="mdi-delete-alert" title="Delete User" @click="delUserDialog = true; user = item.value" /> -->
       </template>
     </v-data-table-server>
-    <v-row justify="center">
-      <v-col cols="8">
-        <v-container class="max-width">
-          <v-pagination
-            v-model="page"
-            class="my-4"
-            :length="totalPages"
-          ></v-pagination>
-        </v-container>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
