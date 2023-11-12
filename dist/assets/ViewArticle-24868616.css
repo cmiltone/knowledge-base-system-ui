@@ -1,0 +1,1 @@
+.likes{text-decoration:underline;color:#00f;cursor:pointer}.likes:hover+.likers{display:block}.likers{display:none;position:absolute;z-index:1000;background:#ccc;border-radius:10px;padding:5px}
