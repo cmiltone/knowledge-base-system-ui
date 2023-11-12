@@ -1,1 +1,0 @@
-import{V as o}from"./VMain-cc83831a.js";import{O as t,B as r,D as a,H as n,G as s,c}from"./index-c247efdd.js";import"./ssrBoot-d6f660a8.js";import"./tag-d920acd8.js";const d=t({__name:"Auth",setup(p){return(_,m)=>{const e=r("router-view");return a(),n(o,null,{default:s(()=>[c(e)]),_:1})}}});export{d as default};
