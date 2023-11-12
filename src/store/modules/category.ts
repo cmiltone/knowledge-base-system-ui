@@ -101,7 +101,7 @@ const category: Module<CategoryState, unknown> = {
             },
             { root: true }
           );
-          return response.data.category;
+          return response.data;
         })
         .catch((error) => {
           context.dispatch(

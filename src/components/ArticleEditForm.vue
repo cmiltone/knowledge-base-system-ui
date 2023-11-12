@@ -7,7 +7,7 @@
     >
       <category-form
         v-if="categoryDialog"
-        @category-saved="categoryDialog = false"
+        @category-saved="exitCat"
       />
     </v-dialog>
     <h1 class="ma-6">
@@ -51,8 +51,10 @@
           :loading="loadingCategories"
           @update:search="searchCategories"
         >
-          <template v-slot:no-data>
-            <v-btn color="blue" variant="text" class="ma-2" @click="addCategory">Add Category</v-btn>
+          <template v-slot:append>
+            <v-btn color="blue" variant="text" class="ma-2" @click="addCategory">
+              <v-icon icon="mdi-plus" />
+            </v-btn>
           </template>
         </v-autocomplete>
 
@@ -134,6 +136,7 @@ import { createNamespacedHelpers } from 'vuex';
 import articleStoreModule from '@/store/modules/article';
 import categoryStoreModule from '@/store/modules/category';
 import CategoryForm from './CategoryForm.vue';
+import { Category } from '@/types/article';
 
 const {
   mapActions: articleActions,
@@ -152,7 +155,7 @@ export default {
   data: () => ({
     valid: false,
     fileBaseUrl: `${BASE_URL}/v1/file`,
-    loading: false,
+    //loading: false,
     title: '',
     content: '',
     category: '',
@@ -180,10 +183,10 @@ export default {
   },
   created() {
     this.fetchCategories();
-    this.loading = true;
+    //this.loading = true;
     this.fetchArticle(`?articleId=${this.articleId}`).then((data) => {
       if (data) {
-        this.loading = false;
+        //this.loading = false;
         this.title = data.title;
         this.content = data.content;
         this.category = data.category?._id;
@@ -239,6 +242,10 @@ export default {
     },
     removeMedia(id: string) {
       this.deletedMedia.push(id);
+    },
+    exitCat(cat: Category) {
+      this.categoryDialog = false;
+      if (cat) this.searchCategories(cat.name);
     }
   },
   beforeCreate() {

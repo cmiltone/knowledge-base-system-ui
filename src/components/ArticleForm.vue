@@ -51,8 +51,10 @@
           :loading="loadingCategories"
           @update:search="searchCategories"
         >
-          <template v-slot:no-data>
-            <v-btn color="blue" variant="text" class="ma-2" @click="addCategory">Add Category</v-btn>
+          <template v-slot:append>
+            <v-btn color="blue" variant="text" class="ma-2" @click="addCategory">
+              <v-icon icon="mdi-plus" />
+            </v-btn>
           </template>
         </v-autocomplete>
 
@@ -110,6 +112,7 @@ import { createNamespacedHelpers } from 'vuex';
 import articleStoreModule from '@/store/modules/article';
 import categoryStoreModule from '@/store/modules/category';
 import CategoryForm from './CategoryForm.vue';
+import { Category } from '@/types/article';
 
 const {
   mapActions: articleActions,
@@ -186,6 +189,10 @@ export default {
     },
     addCategory() {
       this.categoryDialog = true;
+    },
+    exitCat(cat: Category) {
+      if (cat) this.searchCategories(cat.name);
+      this.categoryDialog = false;
     }
   },
   beforeCreate() {
