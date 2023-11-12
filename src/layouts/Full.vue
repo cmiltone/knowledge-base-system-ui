@@ -13,6 +13,7 @@
     <v-list-item link title="Settings" />
   </v-navigation-drawer>
   <v-main>
+    <v-progress-linear v-if="loading" indeterminate />
     <router-view />
   </v-main>
 </template>
@@ -23,6 +24,9 @@
     computed: {
       user() {
         return this.$store.getters.user;
+      },
+      loading() {
+        return this.$store.getters.loadingRequest;
       }
     },
     created() {
