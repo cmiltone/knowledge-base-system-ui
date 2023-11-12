@@ -1,1 +1,1 @@
-exports.apps = [{ name: "AKBS-UI", script: './app.js' }]
+exports.apps = [{ name: "ui", script: './app.js' }]
