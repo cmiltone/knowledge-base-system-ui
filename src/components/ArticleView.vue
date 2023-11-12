@@ -57,7 +57,7 @@
         </div>
       </v-card-subtitle>
       <v-card-text>
-        <p class="mt-4">{{ article.content }}</p>
+        <p class="mt-4" style="white-space: pre-wrap">{{ article.content }}</p>
 
         <v-row class="my-4">
           <v-col
